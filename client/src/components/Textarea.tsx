@@ -14,6 +14,7 @@ function Textarea({ tabChar }: Props) {
 			spellCheck="false"
 			placeholder="Paste your code here..."
 			className="text-box"
+			wrap="off"
 			value={value}
 			onChange={e => {
 				e.preventDefault();
