@@ -1,15 +1,18 @@
-import React from "react";
+import React, { createContext, useState } from "react";
 import "./styles/App.sass";
+import Textarea from "./components/Textarea";
+import LineNumbers from "./components/LineNumbers";
+
+export const Context: React.Context<any> = createContext({});
 
 function App() {
+	const [value, setValue] = useState("");
 	return (
 		<main>
-			<div className="line-numbers">hi</div>
-			<textarea
-				spellCheck="false"
-				placeholder="Paste your code here..."
-				className="text-box"
-			></textarea>
+			<Context.Provider value={{ value, setValue }}>
+				<LineNumbers />
+				<Textarea tabChar="&#9;" />
+			</Context.Provider>
 		</main>
 	);
 }
