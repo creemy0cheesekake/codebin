@@ -3,7 +3,30 @@
 main
     display: flex
     height: 100vh
+    align-items: stretch
+    flex-direction: row
+    flex-wrap: wrap
     .text-box
         padding: .25rem
         flex: 1
         background-color: var.$base02
+
+.textarea
+    width: 100%
+
+$code-margin: 10px
+
+.CodeMirror-code, .CodeMirror-cursors
+    margin-left: $code-margin
+
+.CodeMirror-linenumber
+    margin-left: $code-margin * -1
+
+.menu-bar
+    // position: absolute
+    // bottom: 0
+    width: 100%
+    padding: 10px
+    background-color: red
+
+// .cm-s-solarized

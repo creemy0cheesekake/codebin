@@ -1,20 +1,37 @@
-import React, { createContext, useState } from "react";
+import React, { useState } from "react";
 import "./styles/App.sass";
-import Textarea from "./components/Textarea";
-import LineNumbers from "./components/LineNumbers";
-
-export const Context: React.Context<any> = createContext({});
+import "codemirror/lib/codemirror.css";
+import "codemirror/theme/solarized-dark.css";
+import "codemirror/mode/javascript/javascript";
+// @ts-ignore
+import { Controlled } from "react-codemirror2";
 
 function App() {
+	const [wrap, setWrap] = useState(true);
+	const [language, setLanguage] = useState("javascript");
+
 	const [value, setValue] = useState("");
 	return (
 		<main>
-			<Context.Provider value={{ value, setValue }}>
-				<LineNumbers />
-				<Textarea tabChar="&#9;" />
-			</Context.Provider>
+			<Controlled
+				onBeforeChange={(_: any, __: any, val: string) => setValue(val)}
+				value={value}
+				className="textarea"
+				options={{
+					lineWrapping: wrap,
+					mode: language,
+					lineNumbers: true,
+					theme: "solarized",
+				}}
+			/>
+			<MenuBar />
 		</main>
 	);
+}
+
+function MenuBar() {
+	const [value, setValue] = useState("");
+	return <div className="menu-bar">hi</div>;
 }
 
 export default App;
