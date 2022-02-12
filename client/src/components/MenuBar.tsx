@@ -6,11 +6,12 @@ function MenuBar() {
 	const [link, setLink] = useState("");
 	return (
 		<div className="menu-bar">
-			<div className="language-selector">
+			<div className="language-selector-and-save">
 				<button onClick={_ => setShowModal(true)}>
 					Select Language
 				</button>
-				<span> Language: {language.toUpperCase()}</span>
+				<span>Language: {language.toUpperCase()}</span>
+				<button>Save</button>
 			</div>
 			<div className="shareable-link">
 				{!link ? (
