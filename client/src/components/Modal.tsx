@@ -152,7 +152,10 @@ const Modal = () => {
 					<div className="content-box">
 						{languages.map(el => (
 							<div
-								className="lang"
+								className={
+									"lang " +
+									(langSelection === el ? "active" : "")
+								}
 								onClick={() => setLangSelection(el)}
 							>
 								{el}
