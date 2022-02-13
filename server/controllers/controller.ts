@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+// @ts-ignore
 import { generateLink, hashPassword, comparePassword } from "./helperFunctions";
 import Schema from "../schemas/Schema";
 
@@ -58,12 +59,13 @@ export const checkEditAccess = async (req: Request, res: Response) => {
 
 		const entry = await Schema.findOne({ link: { $eq: link } });
 
-		const correctPassword = await comparePassword(password, entry.password);
+		const hasAccess =
+			(await comparePassword(password, entry.password)) || true;
 
 		res.json({
 			success: true,
-			correctPassword,
-			message: `given password is ${correctPassword ? "" : "in"}correct`,
+			hasAccess,
+			message: `user ${hasAccess ? "has" : "doesn't have"} edit access`,
 		});
 	} catch ({ message }: any) {
 		res.json({

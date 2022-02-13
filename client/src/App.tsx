@@ -1,4 +1,4 @@
-import React, { useState, createContext } from "react";
+import React, { useState, createContext, useEffect } from "react";
 import "./styles/App.sass";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/solarized-dark.css";
@@ -133,6 +133,12 @@ function App() {
 	const [wrap, setWrap] = useState(true);
 	const [language, setLanguage] = useState("javascript");
 	const [showModal, setShowModal] = useState(false);
+	const [link, setLink] = useState("codebin.herokuapp.com/ad42k4");
+	const [canEdit, setCanEdit] = useState(false);
+
+	useEffect(() => {
+		if (window.location.pathname === "/") setCanEdit(true);
+	}, []);
 
 	const [value, setValue] = useState("");
 	return (
@@ -145,11 +151,13 @@ function App() {
 					setLanguage,
 					showModal,
 					setShowModal,
+					link,
+					setLink,
 				}}
 			>
 				<Controlled
 					onBeforeChange={(_: any, __: any, val: string) =>
-						setValue(val)
+						canEdit && setValue(val)
 					}
 					value={value}
 					className="textarea"

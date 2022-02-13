@@ -15,7 +15,9 @@ app.use("/api/v1/", router);
 
 const mongoURI: string = process.env.MONGO_URI!;
 
-app.listen(3000, () => console.log("running on port 3000"));
+app.listen(process.env.PORT, () =>
+	console.log(`running on port ${process.env.PORT}`)
+);
 
 mongoose.connect(mongoURI, () => {
 	console.log("connected to mongoose");
