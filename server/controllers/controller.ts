@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { generateLink } from "./helperFunctions";
+import { generateLink, hashPassword, comparePassword } from "./helperFunctions";
 import Schema from "../schemas/Schema";
 
 export const createNewEntry = async (req: Request, res: Response) => {
@@ -11,12 +11,59 @@ export const createNewEntry = async (req: Request, res: Response) => {
 		await Schema.create({
 			link,
 			body,
-			password,
+			password: await hashPassword(password),
 		});
 
 		res.json({
 			success: true,
 			message: "entry successfully created",
+		});
+	} catch ({ message }: any) {
+		res.json({
+			success: false,
+			message,
+		});
+	}
+};
+
+export const updateEntry = async (req: Request, res: Response) => {
+	try {
+		const { link, password, body } = req.body;
+
+		const entry = await Schema.findOne({ link: { $eq: link } });
+
+		// if password is null it will delete password. if password is undefined then it wont change
+		entry.password =
+			password !== undefined
+				? await hashPassword(password)
+				: entry.password;
+		entry.body = body;
+		entry.save();
+
+		res.json({
+			success: true,
+			message: "entry successfully updated",
+		});
+	} catch ({ message }: any) {
+		res.json({
+			success: false,
+			message,
+		});
+	}
+};
+
+export const checkEditAccess = async (req: Request, res: Response) => {
+	try {
+		const { link, password } = req.body;
+
+		const entry = await Schema.findOne({ link: { $eq: link } });
+
+		const correctPassword = await comparePassword(password, entry.password);
+
+		res.json({
+			success: true,
+			correctPassword,
+			message: `given password is ${correctPassword ? "" : "in"}correct`,
 		});
 	} catch ({ message }: any) {
 		res.json({
