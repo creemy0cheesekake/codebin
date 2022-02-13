@@ -1,8 +1,8 @@
 import express from "express";
-import { sayHi } from "../controllers/controller";
+import { createNewEntry } from "../controllers/controller";
 
 const router = express.Router();
 
-router.route("/*").get(sayHi);
+router.route("/create-new-entry").get(createNewEntry);
 
 export default router;
