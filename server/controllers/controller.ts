@@ -4,9 +4,9 @@ import Schema from "../schemas/Schema";
 
 export const createNewEntry = async (req: Request, res: Response) => {
 	try {
-		let link = await generateLink();
+		let link = generateLink();
 		while (!!(await Schema.findOne({ link: { $eq: link } })))
-			link = await generateLink();
+			link = generateLink();
 		const { password, body } = req.body;
 		await Schema.create({
 			link,
