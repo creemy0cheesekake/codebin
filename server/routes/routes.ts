@@ -3,6 +3,6 @@ import { createNewEntry } from "../controllers/controller";
 
 const router = express.Router();
 
-router.route("/create-new-entry").get(createNewEntry);
+router.route("/create-new-entry").post(createNewEntry);
 
 export default router;

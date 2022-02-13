@@ -7,17 +7,16 @@ export const createNewEntry = async (req: Request, res: Response) => {
 		let link = await generateLink();
 		while (!!(await Schema.findOne({ link: { $eq: link } })))
 			link = await generateLink();
-		const [password, body] = ["", "testBody"];
-		const entry = new Schema({
+		const { password, body } = req.body;
+		await Schema.create({
 			link,
 			body,
+			password,
 		});
-		entry.password = password || undefined;
-		await entry.save();
 
 		res.json({
 			success: true,
-			message: "user successfully created",
+			message: "entry successfully created",
 		});
 	} catch ({ message }: any) {
 		res.json({
