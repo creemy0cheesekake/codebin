@@ -1,8 +1,16 @@
 import express from "express";
-import { sayHi } from "../controllers/controller";
+import {
+	createNewEntry,
+	updateEntry,
+	checkEditAccess,
+} from "../controllers/controller";
 
 const router = express.Router();
 
-router.route("/*").get(sayHi);
+router.route("/create-new-entry").post(createNewEntry);
+
+router.route("/update-entry").patch(updateEntry);
+
+router.route("/check-edit-access").post(checkEditAccess);
 
 export default router;
