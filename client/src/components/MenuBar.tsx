@@ -1,8 +1,10 @@
 import React, { useState, useContext } from "react";
 import { Context } from "../App";
+const axios = require("axios").default;
 
 function MenuBar() {
-	const { language, setShowModal, link }: any = useContext(Context);
+	const { language, setShowModal, link, value, setLink }: any =
+		useContext(Context);
 	const [passwordVal, setPasswordVal] = useState("");
 	const [linkBoxActive, setLinkBoxActive] = useState(false);
 
@@ -14,6 +16,21 @@ function MenuBar() {
 		setTimeout(() => setLinkBoxActive(false), 3000);
 	};
 
+	const handleSubmitPassword = () => {
+		return;
+	};
+
+	const handleGetLink = async () => {
+		const response = await axios.post(
+			process.env.REACT_APP_API_URL + "/create-new-entry",
+			{
+				body: encodeURI(value),
+			}
+		);
+
+		setLink(`${window.location.host}/${response.data.link}`);
+	};
+
 	return (
 		<div className="menu-bar">
 			<div className="language-selector-and-save">
@@ -21,26 +38,36 @@ function MenuBar() {
 					Select Language
 				</button>
 				<span>Language: {language.toUpperCase()}</span>
-				<button>Save</button>
+				{!!link && <button>Save</button>}
 			</div>
 			<div className="shareable-link-and-password">
-				<button>Submit Password</button>
-				<input
-					type="text"
-					value={passwordVal}
-					onChange={e => setPasswordVal(e.target.value)}
-					placeholder="password..."
-				/>
+				{!!link && (
+					<>
+						<button onClick={handleSubmitPassword}>
+							Submit Password
+						</button>
+						<input
+							type="text"
+							value={passwordVal}
+							onChange={e => setPasswordVal(e.target.value)}
+							placeholder="password..."
+						/>
+					</>
+				)}
 				{!link ? (
-					<button>Get Link</button>
+					<button onClick={handleGetLink}>Get Link</button>
 				) : (
 					<>
 						<span
 							className="link-box-active"
-							style={{
-								opacity: linkBoxActive ? 1 : 0,
-								marginTop: linkBoxActive ? "-30px" : 0,
-							}}
+							style={
+								linkBoxActive
+									? {
+											opacity: 1,
+											marginTop: "-30px",
+									  }
+									: {}
+							}
 						>
 							Copied!
 						</span>

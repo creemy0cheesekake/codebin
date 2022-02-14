@@ -130,17 +130,17 @@ import "codemirror/mode/all/tiki";
 export const Context = createContext({});
 
 function App() {
+	const [value, setValue] = useState("");
 	const [wrap, setWrap] = useState(true);
 	const [language, setLanguage] = useState("javascript");
 	const [showModal, setShowModal] = useState(false);
-	const [link, setLink] = useState("codebin.herokuapp.com/ad42k4");
+	const [link, setLink] = useState(""); //codebin.herokuapp.com/ad42k4");
 	const [canEdit, setCanEdit] = useState(false);
 
 	useEffect(() => {
 		if (window.location.pathname === "/") setCanEdit(true);
 	}, []);
 
-	const [value, setValue] = useState("");
 	return (
 		<main>
 			<Context.Provider
@@ -153,6 +153,7 @@ function App() {
 					setShowModal,
 					link,
 					setLink,
+					value,
 				}}
 			>
 				<Controlled
