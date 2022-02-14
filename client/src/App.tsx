@@ -154,6 +154,7 @@ function App() {
 					link,
 					setLink,
 					value,
+					setCanEdit,
 				}}
 			>
 				<Controlled

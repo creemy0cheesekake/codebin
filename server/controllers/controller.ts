@@ -2,22 +2,23 @@ import { Request, Response } from "express";
 // @ts-ignore
 import { generateLink, hashPassword, comparePassword } from "./helperFunctions";
 import Schema from "../schemas/Schema";
+import { Model } from "mongoose";
 
 export const createNewEntry = async (req: Request, res: Response) => {
 	try {
 		let link = generateLink();
 		while (!!(await Schema.findOne({ link: { $eq: link } })))
 			link = generateLink();
-		const { password, body } = req.body;
+		const { body } = req.body;
 		await Schema.create({
 			link,
 			body,
-			password: await hashPassword(password),
 		});
 
 		res.json({
 			success: true,
 			message: "entry successfully created",
+			link,
 		});
 	} catch ({ message }: any) {
 		res.json({
@@ -65,7 +66,28 @@ export const checkEditAccess = async (req: Request, res: Response) => {
 		res.json({
 			success: true,
 			hasAccess,
-			message: `user ${hasAccess ? "has" : "doesn't have"} edit access`,
+			message: `edit access ${hasAccess ? "" : "not"} granted`,
+		});
+	} catch ({ message }: any) {
+		res.json({
+			success: false,
+			message,
+		});
+	}
+};
+
+export const getEntry = async (req: Request, res: Response) => {
+	try {
+		const { link } = req.body;
+
+		const entry: Model<any> | null = await Schema.findOne({
+			link: { $eq: link },
+		});
+
+		res.json({
+			success: true,
+			entry,
+			message: `entry ${entry ? "" : "not"} found`,
 		});
 	} catch ({ message }: any) {
 		res.json({

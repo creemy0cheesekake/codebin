@@ -3,7 +3,7 @@ import { Context } from "../App";
 const axios = require("axios").default;
 
 function MenuBar() {
-	const { language, setShowModal, link, value, setLink }: any =
+	const { language, setShowModal, link, value, setLink, setCanEdit }: any =
 		useContext(Context);
 	const [passwordVal, setPasswordVal] = useState("");
 	const [linkBoxActive, setLinkBoxActive] = useState(false);
@@ -16,8 +16,35 @@ function MenuBar() {
 		setTimeout(() => setLinkBoxActive(false), 3000);
 	};
 
-	const handleSubmitPassword = () => {
-		return;
+	const handleSubmitPassword = async () => {
+		const password = await (
+			await axios.get(process.env.REACT_APP_API_URL + "/get-entry", {
+				link,
+			})
+		).data.password;
+		if (password) {
+			const data = await (
+				await axios.post(
+					process.env.REACT_APP_API_URL + "/check-edit-access",
+					{
+						link,
+						password: passwordVal,
+					}
+				)
+			).data;
+			alert(data.message);
+			setCanEdit(data.hasAccess);
+		} else {
+			const data = await axios.patch(
+				process.env.REACT_APP_API_URL + "/update-entry",
+				{
+					link,
+					password: passwordVal,
+				}
+			);
+			if (data.response.success) alert("password set successfully");
+			else alert(`err: ${data.response.message}`);
+		}
 	};
 
 	const handleGetLink = async () => {
@@ -28,6 +55,7 @@ function MenuBar() {
 			}
 		);
 
+		if (!response.data.success) return alert(response.data.message);
 		setLink(`${window.location.host}/${response.data.link}`);
 	};
 
@@ -71,7 +99,7 @@ function MenuBar() {
 						>
 							Copied!
 						</span>
-						<span className={"link-box"} onClick={handleLinkClick}>
+						<span className="link-box" onClick={handleLinkClick}>
 							{link}
 						</span>
 					</>
