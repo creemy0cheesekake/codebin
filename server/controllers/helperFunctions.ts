@@ -1,5 +1,6 @@
 import crypto from "crypto";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export const generateLink = () => crypto.randomBytes(3).toString("hex");
 
@@ -17,3 +18,6 @@ export const comparePassword = async (
 ) => {
 	return bcrypt.compare(password, hashedPassword);
 };
+
+export const createJwt = (id: any) =>
+	jwt.sign({ id }, process.env.JWT_SECRET!, { expiresIn: "3d" });

@@ -66,20 +66,25 @@ function MenuBar() {
 					Select Language
 				</button>
 				<span>Language: {language.toUpperCase()}</span>
-				{!!link && <button>Save</button>}
+				{!!link && (
+					<button className="save-file-button">Save File</button>
+				)}
 			</div>
 			<div className="shareable-link-and-password">
 				{!!link && (
 					<>
-						<button onClick={handleSubmitPassword}>
-							Submit Password
-						</button>
 						<input
 							type="text"
 							value={passwordVal}
 							onChange={e => setPasswordVal(e.target.value)}
 							placeholder="password..."
 						/>
+						<button
+							className="submit-password"
+							onClick={handleSubmitPassword}
+						>
+							Submit
+						</button>
 					</>
 				)}
 				{!link ? (
