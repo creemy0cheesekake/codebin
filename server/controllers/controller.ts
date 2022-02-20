@@ -30,7 +30,7 @@ export const createNewEntry = async (req: Request, res: Response) => {
 
 export const updateEntry = async (req: Request, res: Response) => {
 	try {
-		const { link, password, body } = req.body;
+		const { link, password } = req.body;
 
 		const entry = await Schema.findOne({ link: { $eq: link } });
 
@@ -39,7 +39,6 @@ export const updateEntry = async (req: Request, res: Response) => {
 			password !== undefined
 				? await hashPassword(password)
 				: entry.password;
-		entry.body = body;
 		entry.save();
 
 		res.json({

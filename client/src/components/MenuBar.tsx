@@ -35,15 +35,16 @@ function MenuBar() {
 			alert(data.message);
 			setCanEdit(data.hasAccess);
 		} else {
-			const data = await axios.patch(
+			const response = await axios.patch(
 				process.env.REACT_APP_API_URL + "/update-entry",
 				{
 					link,
 					password: passwordVal,
 				}
 			);
-			if (data.response.success) alert("password set successfully");
-			else alert(`err: ${data.response.message}`);
+			console.log(response);
+			if (response.data.success) alert("password set successfully");
+			else alert(`err: ${response.data.message}`);
 		}
 	};
 
@@ -56,7 +57,7 @@ function MenuBar() {
 		);
 
 		if (!response.data.success) return alert(response.data.message);
-		setLink(`${window.location.host}/${response.data.link}`);
+		setLink(`${response.data.link}`);
 	};
 
 	return (
@@ -105,7 +106,7 @@ function MenuBar() {
 							Copied!
 						</span>
 						<span className="link-box" onClick={handleLinkClick}>
-							{link}
+							{`${window.location.host}/${link}`}
 						</span>
 					</>
 				)}
