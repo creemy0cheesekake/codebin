@@ -14,6 +14,6 @@ router.route("/update-entry").patch(updateEntry);
 
 router.route("/check-edit-access").post(checkEditAccess);
 
-router.route("/get-entry").get(getEntry);
+router.route("/get-entry/:link").get(getEntry);
 
 export default router;

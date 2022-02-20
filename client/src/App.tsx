@@ -247,6 +247,7 @@ import "codemirror/mode/erlang/erlang";
 import "codemirror/mode/lua/lua";
 import "codemirror/mode/q/q";
 import "codemirror/mode/tiki/tiki";
+import axios from "axios";
 
 export const Context = createContext({});
 
@@ -259,7 +260,21 @@ function App() {
 	const [canEdit, setCanEdit] = useState(false);
 
 	useEffect(() => {
-		if (window.location.pathname === "/") setCanEdit(true);
+		(async () => {
+			if (window.location.pathname === "/") return setCanEdit(true);
+			else {
+				const entry = await (
+					await axios.get(
+						process.env.REACT_APP_API_URL +
+							"/get-entry" +
+							window.location.pathname
+					)
+				).data.entry;
+				if (entry) setValue(decodeURI(entry.body));
+				else window.location.href = "/";
+				setLink(window.location.pathname.substring(1));
+			}
+		})();
 	}, []);
 
 	return (

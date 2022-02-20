@@ -18,10 +18,10 @@ function MenuBar() {
 
 	const handleSubmitPassword = async () => {
 		const password = await (
-			await axios.get(process.env.REACT_APP_API_URL + "/get-entry", {
-				link,
-			})
-		).data.password;
+			await axios.get(
+				process.env.REACT_APP_API_URL + "/get-entry/" + link
+			)
+		).data.entry.password;
 		if (password) {
 			const data = await (
 				await axios.post(

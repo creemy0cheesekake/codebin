@@ -77,7 +77,7 @@ export const checkEditAccess = async (req: Request, res: Response) => {
 
 export const getEntry = async (req: Request, res: Response) => {
 	try {
-		const { link } = req.body;
+		const link = req.params.link;
 
 		const entry: Model<any> | null = await Schema.findOne({
 			link: { $eq: link },
