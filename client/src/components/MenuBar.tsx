@@ -1,13 +1,20 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Context } from "../App";
 const axios = require("axios").default;
 
 function MenuBar() {
-	const { language, setShowModal, link, value, setLink, setCanEdit }: any =
-		useContext(Context);
+	const {
+		language,
+		setShowModal,
+		link,
+		value,
+		setLink,
+		setCanEdit,
+		canEdit,
+		hasPassword,
+	} = useContext(Context);
 	const [passwordVal, setPasswordVal] = useState("");
 	const [linkBoxActive, setLinkBoxActive] = useState(false);
-
 	const handleLinkClick = (
 		e: React.MouseEvent<HTMLSpanElement, MouseEvent>
 	) => {
@@ -17,6 +24,7 @@ function MenuBar() {
 	};
 
 	const handleSubmitPassword = async () => {
+		if (!passwordVal.replace(/\s/g, "").length) return setPasswordVal("");
 		const password = await (
 			await axios.get(
 				process.env.REACT_APP_API_URL + "/get-entry/" + link
@@ -42,7 +50,6 @@ function MenuBar() {
 					password: passwordVal,
 				}
 			);
-			console.log(response);
 			if (response.data.success) alert("password set successfully");
 			else alert(`err: ${response.data.message}`);
 		}
@@ -72,6 +79,16 @@ function MenuBar() {
 				)}
 			</div>
 			<div className="shareable-link-and-password">
+				<div className="pw-indicators">
+					<div
+						className={
+							"has-password " + (hasPassword ? "green" : "red")
+						}
+					>{`Has ${hasPassword ? "" : "no"} password`}</div>
+					<div
+						className={"can-edit " + (canEdit ? "green" : "red")}
+					>{`Can ${canEdit ? "" : "not"} edit`}</div>
+				</div>
 				{!!link && (
 					<>
 						<input

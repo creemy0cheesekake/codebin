@@ -249,7 +249,7 @@ import "codemirror/mode/q/q";
 import "codemirror/mode/tiki/tiki";
 import axios from "axios";
 
-export const Context = createContext({});
+export const Context: any = createContext(undefined);
 
 function App() {
 	const [value, setValue] = useState("");
@@ -258,6 +258,7 @@ function App() {
 	const [showModal, setShowModal] = useState(false);
 	const [link, setLink] = useState("");
 	const [canEdit, setCanEdit] = useState(false);
+	const [hasPassword, setHasPassword] = useState(false);
 
 	useEffect(() => {
 		(async () => {
@@ -273,6 +274,7 @@ function App() {
 					).data.entry;
 					if (entry) setValue(decodeURI(entry.body));
 					else window.location.href = "/";
+					if (entry.password) setHasPassword(true);
 					setLink(window.location.pathname.substring(1));
 					let hasEditAccess = await (
 						await axios.get(
@@ -289,8 +291,6 @@ function App() {
 		})();
 	}, []);
 
-	useEffect(() => console.log(value));
-
 	return (
 		<main>
 			<Context.Provider
@@ -304,7 +304,9 @@ function App() {
 					link,
 					setLink,
 					value,
+					canEdit,
 					setCanEdit,
+					hasPassword,
 				}}
 			>
 				<Controlled
