@@ -4,8 +4,6 @@ import dotenv from "dotenv";
 import router from "./routes/routes";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
-import cookieParser from "cookie-parser";
-import session from "express-session";
 dotenv.config();
 
 const app = express();
@@ -18,7 +16,6 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use("/api/v1/", router);
-app.use(cookieParser());
 
 app.use(function (req, res, next) {
 	res.setHeader("Access-Control-Allow-Origin", "*");
@@ -27,14 +24,6 @@ app.use(function (req, res, next) {
 	res.setHeader("Access-Control-Allow-Credentials", "true");
 	next();
 });
-
-app.use(
-	session({
-		secret: "secretKey",
-		resave: false,
-		saveUninitialized: false,
-	})
-);
 
 const mongoURI: string = process.env.MONGO_URI!;
 
@@ -46,3 +35,4 @@ mongoose.connect(mongoURI, () => {
 });
 // TODO: refactor api routes to fit REST standards
 // TODO: add indicator for whether or not a password is set
+// TODO: IDIOT ADD ERROR CODES

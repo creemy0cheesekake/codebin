@@ -12,7 +12,7 @@ router.route("/create-new-entry").post(createNewEntry);
 
 router.route("/update-entry").patch(updateEntry);
 
-router.route("/check-edit-access").post(checkEditAccess);
+router.route("/check-edit-access/:link/:password?").get(checkEditAccess);
 
 router.route("/get-entry/:link").get(getEntry);
 

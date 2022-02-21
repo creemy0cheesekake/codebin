@@ -261,21 +261,35 @@ function App() {
 
 	useEffect(() => {
 		(async () => {
-			if (window.location.pathname === "/") return setCanEdit(true);
-			else {
-				const entry = await (
-					await axios.get(
-						process.env.REACT_APP_API_URL +
-							"/get-entry" +
-							window.location.pathname
-					)
-				).data.entry;
-				if (entry) setValue(decodeURI(entry.body));
-				else window.location.href = "/";
-				setLink(window.location.pathname.substring(1));
+			try {
+				if (window.location.pathname === "/") return setCanEdit(true);
+				else {
+					const entry = await (
+						await axios.get(
+							process.env.REACT_APP_API_URL +
+								"/get-entry" +
+								window.location.pathname
+						)
+					).data.entry;
+					if (entry) setValue(decodeURI(entry.body));
+					else window.location.href = "/";
+					setLink(window.location.pathname.substring(1));
+					let hasEditAccess = await (
+						await axios.get(
+							process.env.REACT_APP_API_URL +
+								"/check-edit-access" +
+								window.location.pathname
+						)
+					).data.hasAccess;
+					setCanEdit(hasEditAccess);
+				}
+			} catch (err: any) {
+				alert(`err: ${err.message}`);
 			}
 		})();
 	}, []);
+
+	useEffect(() => console.log(value));
 
 	return (
 		<main>
@@ -294,9 +308,7 @@ function App() {
 				}}
 			>
 				<Controlled
-					onBeforeChange={(_: any, __: any, val: string) =>
-						canEdit && setValue(val)
-					}
+					onBeforeChange={(_, __, val: string) => setValue(val)}
 					value={value}
 					className="textarea"
 					options={{
@@ -304,6 +316,7 @@ function App() {
 						mode: language,
 						lineNumbers: true,
 						theme: "solarized",
+						readOnly: !canEdit,
 					}}
 				/>
 				<MenuBar />

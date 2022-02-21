@@ -24,12 +24,12 @@ function MenuBar() {
 		).data.entry.password;
 		if (password) {
 			const data = await (
-				await axios.post(
-					process.env.REACT_APP_API_URL + "/check-edit-access",
-					{
-						link,
-						password: passwordVal,
-					}
+				await axios.get(
+					process.env.REACT_APP_API_URL +
+						"/check-edit-access/" +
+						link +
+						"/" +
+						passwordVal
 				)
 			).data;
 			alert(data.message);
