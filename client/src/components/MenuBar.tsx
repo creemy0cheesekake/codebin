@@ -18,7 +18,7 @@ function MenuBar() {
 	const handleLinkClick = (
 		e: React.MouseEvent<HTMLSpanElement, MouseEvent>
 	) => {
-		navigator.clipboard.writeText(link);
+		navigator.clipboard.writeText(`${window.location.host}/${link}`);
 		setLinkBoxActive(true);
 		setTimeout(() => setLinkBoxActive(false), 3000);
 	};
@@ -26,15 +26,13 @@ function MenuBar() {
 	const handleSubmitPassword = async () => {
 		if (!passwordVal.replace(/\s/g, "").length) return setPasswordVal("");
 		const password = await (
-			await axios.get(
-				process.env.REACT_APP_API_URL + "/get-entry/" + link
-			)
+			await axios.get(process.env.REACT_APP_API_URL + "/entry/" + link)
 		).data.entry.password;
 		if (password) {
 			const data = await (
 				await axios.get(
 					process.env.REACT_APP_API_URL +
-						"/check-edit-access/" +
+						"/edit-access/" +
 						link +
 						"/" +
 						passwordVal
@@ -44,7 +42,7 @@ function MenuBar() {
 			setCanEdit(data.hasAccess);
 		} else {
 			const response = await axios.patch(
-				process.env.REACT_APP_API_URL + "/update-entry",
+				process.env.REACT_APP_API_URL + "/entry",
 				{
 					link,
 					password: passwordVal,
@@ -57,7 +55,7 @@ function MenuBar() {
 
 	const handleGetLink = async () => {
 		const response = await axios.post(
-			process.env.REACT_APP_API_URL + "/create-new-entry",
+			process.env.REACT_APP_API_URL + "/entry",
 			{
 				body: encodeURI(value),
 			}
@@ -69,7 +67,7 @@ function MenuBar() {
 
 	const handleSave = async () => {
 		const response = await axios.patch(
-			process.env.REACT_APP_API_URL + "/update-entry",
+			process.env.REACT_APP_API_URL + "/entry",
 			{
 				link,
 				body: value,

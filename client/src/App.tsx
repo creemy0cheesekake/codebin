@@ -268,7 +268,7 @@ function App() {
 					const entry = await (
 						await axios.get(
 							process.env.REACT_APP_API_URL +
-								"/get-entry" +
+								"/entry" +
 								window.location.pathname
 						)
 					).data.entry;
@@ -279,7 +279,7 @@ function App() {
 					let hasEditAccess = await (
 						await axios.get(
 							process.env.REACT_APP_API_URL +
-								"/check-edit-access" +
+								"/edit-access" +
 								window.location.pathname
 						)
 					).data.hasAccess;

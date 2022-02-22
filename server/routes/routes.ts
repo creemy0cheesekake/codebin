@@ -8,12 +8,9 @@ import {
 
 const router = express.Router();
 
-router.route("/create-new-entry").post(createNewEntry);
+router.route("/entry").post(createNewEntry).patch(updateEntry);
+router.route("/entry/:link").get(getEntry);
 
-router.route("/update-entry").patch(updateEntry);
-
-router.route("/check-edit-access/:link/:password?").get(checkEditAccess);
-
-router.route("/get-entry/:link").get(getEntry);
+router.route("/edit-access/:link/:password?").get(checkEditAccess);
 
 export default router;
