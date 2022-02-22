@@ -33,6 +33,5 @@ app.listen(PORT, () => console.log(`running on port ${PORT}`));
 mongoose.connect(mongoURI, () => {
 	console.log("connected to mongoose");
 });
-// TODO: add indicator for whether or not a password is set
 // TODO: IDIOT ADD ERROR CODES
 // TODO: add try catch blocks for every async function
