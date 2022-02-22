@@ -14,16 +14,17 @@ app.use(
 		origin: process.env.CLIENT_URL,
 	})
 );
-app.use(bodyParser.json());
-app.use("/api/v1/", router);
 
-app.use(function (req, res, next) {
+app.use((_, res, next) => {
 	res.setHeader("Access-Control-Allow-Origin", "*");
 	res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
 	res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 	res.setHeader("Access-Control-Allow-Credentials", "true");
 	next();
 });
+
+app.use(bodyParser.json());
+app.use("/api/v1/", router);
 
 const mongoURI: string = process.env.MONGO_URI!;
 
