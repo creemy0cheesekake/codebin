@@ -5,12 +5,12 @@ const randomLinkChars =
 export const generateLink = () => {
 	let res = "";
 	for (let i = 0; i < 6; i++)
-		res += randomLinkChars.charAt(Math.random() * 62);
+		res += randomLinkChars.charAt(Math.random() * randomLinkChars.length);
 	return res;
 };
 
 export const hashPassword = async (password: string | null) => {
-	if (password === null) return;
+	if (!password) return;
 	const salt = await bcrypt.genSalt(
 		parseInt(<string>process.env.BCRYPT_SALT_ROUNDS)
 	);

@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-// @ts-ignore
 import { generateLink, hashPassword, comparePassword } from "./helperFunctions";
 import Schema from "../schemas/Schema";
 import { Model } from "mongoose";
