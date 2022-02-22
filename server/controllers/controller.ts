@@ -30,7 +30,7 @@ export const createNewEntry = async (req: Request, res: Response) => {
 
 export const updateEntry = async (req: Request, res: Response) => {
 	try {
-		const { link, password } = req.body;
+		const { link, password, body } = req.body;
 
 		const entry = await Schema.findOne({ link: { $eq: link } });
 
@@ -39,6 +39,7 @@ export const updateEntry = async (req: Request, res: Response) => {
 			password !== undefined
 				? await hashPassword(password)
 				: entry.password;
+		entry.body = body;
 		entry.save();
 
 		res.json({
@@ -66,7 +67,7 @@ export const checkEditAccess = async (req: Request, res: Response) => {
 		res.json({
 			success: true,
 			hasAccess,
-			message: `edit access ${hasAccess ? "" : "not"} granted`,
+			message: `edit access${hasAccess ? "" : " not"} granted`,
 		});
 	} catch ({ message }: any) {
 		res.json({
@@ -87,7 +88,7 @@ export const getEntry = async (req: Request, res: Response) => {
 		res.json({
 			success: true,
 			entry,
-			message: `entry ${entry ? "" : "not"} found`,
+			message: `entry${entry ? "" : " not"} found`,
 		});
 	} catch ({ message }: any) {
 		res.json({

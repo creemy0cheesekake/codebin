@@ -36,3 +36,4 @@ mongoose.connect(mongoURI, () => {
 // TODO: refactor api routes to fit REST standards
 // TODO: add indicator for whether or not a password is set
 // TODO: IDIOT ADD ERROR CODES
+// TODO: add try catch blocks for every async function

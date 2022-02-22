@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { Context } from "../App";
 const axios = require("axios").default;
 
@@ -67,6 +67,18 @@ function MenuBar() {
 		setLink(`${response.data.link}`);
 	};
 
+	const handleSave = async () => {
+		const response = await axios.patch(
+			process.env.REACT_APP_API_URL + "/update-entry",
+			{
+				link,
+				body: value,
+			}
+		);
+		if (response.data.success) alert("saved successfully");
+		else alert(`err: ${response.data.message}`);
+	};
+
 	return (
 		<div className="menu-bar">
 			<div className="language-selector-and-save">
@@ -75,7 +87,9 @@ function MenuBar() {
 				</button>
 				<span>Language: {language.toUpperCase()}</span>
 				{!!link && (
-					<button className="save-file-button">Save File</button>
+					<button onClick={handleSave} className="save-file-button">
+						Save File
+					</button>
 				)}
 			</div>
 			<div className="shareable-link-and-password">
