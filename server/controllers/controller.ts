@@ -56,17 +56,18 @@ export const updateEntry = async (req: Request, res: Response) => {
 
 export const checkEditAccess = async (req: Request, res: Response) => {
 	try {
-		const { link, password } = req.body;
+		const { link, password } = req.params;
 
 		const entry = await Schema.findOne({ link: { $eq: link } });
 
 		const hasAccess =
-			(await comparePassword(password, entry.password)) || true;
+			(await comparePassword(password, entry.password)) ||
+			!entry.password;
 
 		res.json({
 			success: true,
 			hasAccess,
-			message: `edit access ${hasAccess ? "" : "not"} granted`,
+			message: `edit access${hasAccess ? "" : " not"} granted`,
 		});
 	} catch ({ message }: any) {
 		res.json({
@@ -78,7 +79,7 @@ export const checkEditAccess = async (req: Request, res: Response) => {
 
 export const getEntry = async (req: Request, res: Response) => {
 	try {
-		const { link } = req.body;
+		const { link } = req.params;
 
 		const entry: Model<any> | null = await Schema.findOne({
 			link: { $eq: link },
@@ -87,7 +88,7 @@ export const getEntry = async (req: Request, res: Response) => {
 		res.json({
 			success: true,
 			entry,
-			message: `entry ${entry ? "" : "not"} found`,
+			message: `entry${entry ? "" : " not"} found`,
 		});
 	} catch ({ message }: any) {
 		res.json({

@@ -3,60 +3,78 @@ import { Context } from "../App";
 const axios = require("axios").default;
 
 function MenuBar() {
-	const { language, setShowModal, link, value, setLink, setCanEdit }: any =
-		useContext(Context);
+	const {
+		language,
+		setShowModal,
+		link,
+		value,
+		setLink,
+		setCanEdit,
+		canEdit,
+		hasPassword,
+	} = useContext(Context);
 	const [passwordVal, setPasswordVal] = useState("");
 	const [linkBoxActive, setLinkBoxActive] = useState(false);
-
 	const handleLinkClick = (
 		e: React.MouseEvent<HTMLSpanElement, MouseEvent>
 	) => {
-		navigator.clipboard.writeText(link);
+		navigator.clipboard.writeText(`${window.location.host}/${link}`);
 		setLinkBoxActive(true);
 		setTimeout(() => setLinkBoxActive(false), 3000);
 	};
 
 	const handleSubmitPassword = async () => {
+		if (!passwordVal.replace(/\s/g, "").length) return setPasswordVal("");
 		const password = await (
-			await axios.get(process.env.REACT_APP_API_URL + "/get-entry", {
-				link,
-			})
-		).data.password;
+			await axios.get(process.env.REACT_APP_API_URL + "/entry/" + link)
+		).data.entry.password;
 		if (password) {
 			const data = await (
-				await axios.post(
-					process.env.REACT_APP_API_URL + "/check-edit-access",
-					{
-						link,
-						password: passwordVal,
-					}
+				await axios.get(
+					process.env.REACT_APP_API_URL +
+						"/edit-access/" +
+						link +
+						"/" +
+						passwordVal
 				)
 			).data;
 			alert(data.message);
 			setCanEdit(data.hasAccess);
 		} else {
-			const data = await axios.patch(
-				process.env.REACT_APP_API_URL + "/update-entry",
+			const response = await axios.patch(
+				process.env.REACT_APP_API_URL + "/entry",
 				{
 					link,
 					password: passwordVal,
 				}
 			);
-			if (data.response.success) alert("password set successfully");
-			else alert(`err: ${data.response.message}`);
+			if (response.data.success) alert("password set successfully");
+			else alert(`err: ${response.data.message}`);
 		}
 	};
 
 	const handleGetLink = async () => {
 		const response = await axios.post(
-			process.env.REACT_APP_API_URL + "/create-new-entry",
+			process.env.REACT_APP_API_URL + "/entry",
 			{
 				body: encodeURI(value),
 			}
 		);
 
 		if (!response.data.success) return alert(response.data.message);
-		setLink(`${window.location.host}/${response.data.link}`);
+		setLink(`${response.data.link}`);
+	};
+
+	const handleSave = async () => {
+		const response = await axios.patch(
+			process.env.REACT_APP_API_URL + "/entry",
+			{
+				link,
+				body: value,
+			}
+		);
+		if (response.data.success) alert("saved successfully");
+		else alert(`err: ${response.data.message}`);
 	};
 
 	return (
@@ -66,20 +84,37 @@ function MenuBar() {
 					Select Language
 				</button>
 				<span>Language: {language.toUpperCase()}</span>
-				{!!link && <button>Save</button>}
+				{!!link && (
+					<button onClick={handleSave} className="save-file-button">
+						Save File
+					</button>
+				)}
 			</div>
 			<div className="shareable-link-and-password">
+				<div className="pw-indicators">
+					<div
+						className={
+							"has-password " + (hasPassword ? "green" : "red")
+						}
+					>{`Has ${hasPassword ? "" : "no"} password`}</div>
+					<div
+						className={"can-edit " + (canEdit ? "green" : "red")}
+					>{`Can ${canEdit ? "" : "not"} edit`}</div>
+				</div>
 				{!!link && (
 					<>
-						<button onClick={handleSubmitPassword}>
-							Submit Password
-						</button>
 						<input
 							type="text"
 							value={passwordVal}
 							onChange={e => setPasswordVal(e.target.value)}
 							placeholder="password..."
 						/>
+						<button
+							className="submit-password"
+							onClick={handleSubmitPassword}
+						>
+							Submit
+						</button>
 					</>
 				)}
 				{!link ? (
@@ -100,7 +135,7 @@ function MenuBar() {
 							Copied!
 						</span>
 						<span className="link-box" onClick={handleLinkClick}>
-							{link}
+							{`${window.location.host}/${link}`}
 						</span>
 					</>
 				)}
