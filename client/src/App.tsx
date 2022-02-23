@@ -1,4 +1,4 @@
-import { useState, createContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import "./styles/App.sass";
 import "codemirror/lib/codemirror.css";
 import "./styles/solarized-dark-theme.css";
@@ -248,82 +248,70 @@ import "codemirror/mode/lua/lua";
 import "codemirror/mode/q/q";
 import "codemirror/mode/tiki/tiki";
 import axios from "axios";
-
-export const Context: any = createContext(undefined);
+import { Context } from "./components/Context";
 
 function App() {
-	const [value, setValue] = useState("");
-	const [wrap, setWrap] = useState(true);
-	const [language, setLanguage] = useState("javascript");
-	const [showModal, setShowModal] = useState(false);
-	const [link, setLink] = useState("");
-	const [canEdit, setCanEdit] = useState(false);
-	const [hasPassword, setHasPassword] = useState(false);
+	const {
+		wrap,
+		language,
+		showModal,
+		setLink,
+		value,
+		canEdit,
+		setCanEdit,
+		setValue,
+		setHasPassword,
+	} = useContext(Context);
+
+	const getBodyFromLink = async () => {
+		const entry = await (
+			await axios.get(
+				process.env.REACT_APP_API_URL +
+					"/entry" +
+					window.location.pathname
+			)
+		).data.entry;
+		if (entry) setValue(decodeURI(entry.body));
+		return entry;
+	};
+
+	const getEditAccessFromLink = async () => {
+		return await (
+			await axios.get(
+				process.env.REACT_APP_API_URL +
+					"/edit-access" +
+					window.location.pathname
+			)
+		).data.hasAccess;
+	};
 
 	useEffect(() => {
 		(async () => {
-			try {
-				if (window.location.pathname === "/") return setCanEdit(true);
-				else {
-					const entry = await (
-						await axios.get(
-							process.env.REACT_APP_API_URL +
-								"/entry" +
-								window.location.pathname
-						)
-					).data.entry;
-					if (entry) setValue(decodeURI(entry.body));
-					else window.location.href = "/";
-					if (entry.password) setHasPassword(true);
-					setLink(window.location.pathname.substring(1));
-					let hasEditAccess = await (
-						await axios.get(
-							process.env.REACT_APP_API_URL +
-								"/edit-access" +
-								window.location.pathname
-						)
-					).data.hasAccess;
-					setCanEdit(hasEditAccess);
-				}
-			} catch (err: any) {
-				alert(`err: ${err.message}`);
-			}
-		})();
+			if (window.location.pathname === "/") return setCanEdit(true);
+			const entry = await getBodyFromLink();
+			if (!entry) window.location.href = "/";
+			setHasPassword(!!entry.password);
+			setLink(window.location.pathname.substring(1));
+			setCanEdit(await getEditAccessFromLink());
+		})().catch(err => alert(`err: ${err.message}`));
 	}, []);
 
 	return (
 		<main>
-			<Context.Provider
-				value={{
-					wrap,
-					setWrap,
-					language,
-					setLanguage,
-					showModal,
-					setShowModal,
-					link,
-					setLink,
-					value,
-					canEdit,
-					setCanEdit,
-					hasPassword,
+			<Controlled
+				onBeforeChange={(_, __, val: string) => setValue(val)}
+				value={value}
+				className="textarea"
+				options={{
+					lineWrapping: wrap,
+					mode: language,
+					lineNumbers: true,
+					theme: "solarized",
+					readOnly: !canEdit,
 				}}
-			>
-				<Controlled
-					onBeforeChange={(_, __, val: string) => setValue(val)}
-					value={value}
-					className="textarea"
-					options={{
-						lineWrapping: wrap,
-						mode: language,
-						lineNumbers: true,
-						theme: "solarized",
-						readOnly: !canEdit,
-					}}
-				/>
-				<MenuBar />
-				{showModal && <Modal />}
-			</Context.Provider>
+			/>
+			<MenuBar />
+			{showModal && <Modal />}
 		</main>
 	);
 }

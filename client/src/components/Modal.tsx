@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import "../styles/Modal.sass";
 
-import { Context } from "../App";
+import { Context } from "./Context";
 
 const Modal = () => {
 	const languages = [

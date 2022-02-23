@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Context } from "../App";
+import { Context } from "./Context";
 const axios = require("axios").default;
 
 function MenuBar() {
@@ -14,13 +14,12 @@ function MenuBar() {
 		hasPassword,
 	} = useContext(Context);
 	const [passwordVal, setPasswordVal] = useState("");
-	const [linkBoxActive, setLinkBoxActive] = useState(false);
-	const handleLinkClick = (
-		e: React.MouseEvent<HTMLSpanElement, MouseEvent>
-	) => {
+	const [linkBoxClicked, setLinkBoxClicked] = useState(false);
+
+	const handleLinkClick = () => {
 		navigator.clipboard.writeText(`${window.location.host}/${link}`);
-		setLinkBoxActive(true);
-		setTimeout(() => setLinkBoxActive(false), 3000);
+		setLinkBoxClicked(true);
+		setTimeout(() => setLinkBoxClicked(false), 3000);
 	};
 
 	const handleSubmitPassword = async () => {
@@ -124,7 +123,7 @@ function MenuBar() {
 						<span
 							className="link-box-active"
 							style={
-								linkBoxActive
+								linkBoxClicked
 									? {
 											opacity: 1,
 											marginTop: "-30px",
