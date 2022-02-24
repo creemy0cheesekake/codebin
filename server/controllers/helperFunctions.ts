@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import Schema from "../schemas/Schema";
 
 const randomLinkChars =
-	"1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+	"1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM" as const;
 export const generateLink: any = async () => {
 	let res = "";
 	for (let i = 0; i < 6; i++)

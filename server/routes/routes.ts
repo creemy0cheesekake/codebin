@@ -8,8 +8,11 @@ import {
 
 const router = express.Router();
 
-router.route("/entry").post(createNewEntry).patch(updateEntry);
-router.route("/entry/:link").get(getEntry);
+router
+	.route("/entry/:link?")
+	.get(getEntry)
+	.post(createNewEntry)
+	.patch(updateEntry);
 
 router.route("/edit-access/:link/:password?").get(checkEditAccess);
 

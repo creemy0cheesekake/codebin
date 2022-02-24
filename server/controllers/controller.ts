@@ -4,7 +4,7 @@ import Schema from "../schemas/Schema";
 
 export const createNewEntry = async (req: Request, res: Response) => {
 	try {
-		let link = generateLink();
+		let link = await generateLink();
 		const { body } = req.body;
 		await Schema.create({
 			link,
@@ -26,14 +26,15 @@ export const createNewEntry = async (req: Request, res: Response) => {
 
 export const updateEntry = async (req: Request, res: Response) => {
 	try {
-		const { link, password, body } = req.body;
+		const { password, body } = req.body;
+		const { link } = req.params;
 
 		const entry = await Schema.findOne({ link: { $eq: link } });
 
 		if (password !== undefined)
 			entry.password = await hashPassword(password);
 
-		entry.body = body;
+		if (body) entry.body = body;
 		entry.save();
 
 		res.json({

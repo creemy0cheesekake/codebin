@@ -1,5 +1,11 @@
-import React, { useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { Context } from "./Context";
+import {
+	checkEditAccess,
+	setEntryPassword,
+	saveFile,
+	getLink,
+} from "../MenuBarFunctions";
 const axios = require("axios").default;
 
 function MenuBar() {
@@ -12,6 +18,7 @@ function MenuBar() {
 		setCanEdit,
 		canEdit,
 		hasPassword,
+		setHasPassword,
 	} = useContext(Context);
 	const [passwordVal, setPasswordVal] = useState("");
 	const [linkBoxClicked, setLinkBoxClicked] = useState(false);
@@ -24,56 +31,39 @@ function MenuBar() {
 
 	const handleSubmitPassword = async () => {
 		if (!passwordVal.replace(/\s/g, "").length) return setPasswordVal("");
-		const password = await (
-			await axios.get(process.env.REACT_APP_API_URL + "/entry/" + link)
-		).data.entry.password;
-		if (password) {
-			const data = await (
-				await axios.get(
-					process.env.REACT_APP_API_URL +
-						"/edit-access/" +
-						link +
-						"/" +
-						passwordVal
-				)
-			).data;
-			alert(data.message);
-			setCanEdit(data.hasAccess);
+
+		setHasPassword(
+			await (async () =>
+				!!(await (
+					await axios.get(
+						process.env.REACT_APP_API_URL + "/entry/" + link
+					)
+				).data.entry.password))()
+		);
+
+		if (hasPassword) {
+			const [msg, hasAccess] = await checkEditAccess(link, passwordVal);
+			alert(msg);
+			setCanEdit(hasAccess);
 		} else {
-			const response = await axios.patch(
-				process.env.REACT_APP_API_URL + "/entry",
-				{
-					link,
-					password: passwordVal,
-				}
-			);
-			if (response.data.success) alert("password set successfully");
-			else alert(`err: ${response.data.message}`);
+			const [msg, success] = await setEntryPassword(link, passwordVal);
+			if (success) {
+				alert("password set successfully");
+				setPasswordVal(passwordVal);
+			} else alert(`err: ${msg}`);
 		}
 	};
 
 	const handleGetLink = async () => {
-		const response = await axios.post(
-			process.env.REACT_APP_API_URL + "/entry",
-			{
-				body: encodeURI(value),
-			}
-		);
-
-		if (!response.data.success) return alert(response.data.message);
-		setLink(`${response.data.link}`);
+		const [msg, success, newLink] = await getLink(value);
+		if (!success) return alert(msg);
+		setLink(newLink);
 	};
 
 	const handleSave = async () => {
-		const response = await axios.patch(
-			process.env.REACT_APP_API_URL + "/entry",
-			{
-				link,
-				body: value,
-			}
-		);
-		if (response.data.success) alert("saved successfully");
-		else alert(`err: ${response.data.message}`);
+		const [msg, success] = await saveFile(link, value);
+		if (success) alert("saved successfully");
+		else alert(`err: ${msg}`);
 	};
 
 	return (
