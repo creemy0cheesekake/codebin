@@ -52,6 +52,7 @@ function MenuBar() {
 				setPasswordVal(passwordVal);
 			} else alert(`err: ${msg}`);
 		}
+		setPasswordVal("");
 	};
 
 	const handleGetLink = async () => {
@@ -97,6 +98,9 @@ function MenuBar() {
 							value={passwordVal}
 							onChange={e => setPasswordVal(e.target.value)}
 							placeholder="password..."
+							onKeyPress={e =>
+								e.key === "Enter" && handleSubmitPassword()
+							}
 						/>
 						<button
 							className="submit-password"
