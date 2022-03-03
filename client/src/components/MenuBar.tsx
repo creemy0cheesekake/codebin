@@ -109,7 +109,7 @@ function MenuBar() {
 				{!link ? (
 					<button onClick={handleGetLink}>Get Link</button>
 				) : (
-					<>
+					<span className="link-box" onClick={handleLinkClick}>
 						<span
 							className="link-box-active"
 							style={
@@ -123,10 +123,8 @@ function MenuBar() {
 						>
 							Copied!
 						</span>
-						<span className="link-box" onClick={handleLinkClick}>
-							{`${window.location.host}/${link}`}
-						</span>
-					</>
+						{`${window.location.host}/${link}`}
+					</span>
 				)}
 			</div>
 		</div>
