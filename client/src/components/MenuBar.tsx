@@ -6,6 +6,8 @@ import {
 	saveFile,
 	getLink,
 } from "../MenuBarFunctions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 const axios = require("axios").default;
 
 function MenuBar() {
@@ -71,12 +73,12 @@ function MenuBar() {
 		<div className="menu-bar">
 			<div className="language-selector-and-save">
 				<button onClick={_ => setShowModal(true)}>
-					Select Language
+					Language: {language.toUpperCase()}
 				</button>
-				<span>Language: {language.toUpperCase()}</span>
 				{!!link && (
 					<button onClick={handleSave} className="save-file-button">
-						Save File
+						<FontAwesomeIcon icon={faFloppyDisk} />
+						&nbsp;Save File
 					</button>
 				)}
 			</div>
@@ -92,7 +94,7 @@ function MenuBar() {
 					>{`Can ${canEdit ? "" : "not"} edit`}</div>
 				</div>
 				{!!link && (
-					<>
+					<span className="password-box">
 						<input
 							type="text"
 							value={passwordVal}
@@ -102,13 +104,8 @@ function MenuBar() {
 								e.key === "Enter" && handleSubmitPassword()
 							}
 						/>
-						<button
-							className="submit-password"
-							onClick={handleSubmitPassword}
-						>
-							Submit
-						</button>
-					</>
+						<button onClick={handleSubmitPassword}>Submit</button>
+					</span>
 				)}
 				{!link ? (
 					<button onClick={handleGetLink}>Get Link</button>

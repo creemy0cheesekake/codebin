@@ -132,7 +132,6 @@ import { Context } from "./components/Context";
 
 function App() {
 	const {
-		wrap,
 		language,
 		showModal,
 		setLink,
@@ -183,7 +182,7 @@ function App() {
 				value={value}
 				className="textarea"
 				options={{
-					lineWrapping: wrap,
+					lineWrapping: false,
 					mode: language,
 					lineNumbers: true,
 					theme: "solarized",
@@ -197,3 +196,4 @@ function App() {
 }
 
 export default App;
+// TODO: add settings button, which will be modal with toggle wrap and font size, and add conf json object to schema

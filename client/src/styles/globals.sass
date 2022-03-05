@@ -13,7 +13,8 @@ button
     background-color: var.$magenta
     padding: .5rem
     border: none
-    border-radius: 1em
+    border-radius: 1rem
+    font-size: 1rem
     &:hover
         filter: brightness(.75)
         transition: filter .2s
@@ -29,3 +30,13 @@ input
     padding: .5rem
     border-radius: .5rem
     color: var.$base3
+    font-size: 1rem
+
+
+@media (max-width: 1200px)
+    :root
+        font-size: 14px
+
+@media (max-width: 700px)
+    :root
+        font-size: 12px

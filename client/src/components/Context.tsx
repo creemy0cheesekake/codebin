@@ -4,7 +4,6 @@ export const Context: any = createContext(undefined);
 
 function ContextProvider({ children }: any) {
 	const [value, setValue] = useState("");
-	const [wrap, setWrap] = useState(true);
 	const [language, setLanguage] = useState("javascript");
 	const [showModal, setShowModal] = useState(false);
 	const [link, setLink] = useState("");
@@ -15,8 +14,6 @@ function ContextProvider({ children }: any) {
 		<main>
 			<Context.Provider
 				value={{
-					wrap,
-					setWrap,
 					language,
 					setLanguage,
 					showModal,

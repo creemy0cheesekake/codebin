@@ -23,13 +23,13 @@ main
     box-shadow: 0 -1px 5px #0000007f
     display: flex
     justify-content: space-between
+    flex-wrap: wrap
+    gap: 1rem
     color: white
-    div *
-        margin-inline: .5rem
-        &.submit-password
-            margin-right: 7rem
-        &.save-file-button
-            margin-left: 7rem
+    div
+        display: flex
+        gap: .5rem
+        flex-wrap: wrap
 
 .cm-s-solarized
     height: 100% !important
@@ -52,11 +52,15 @@ main
     border-radius: .5em
     transition: all .5s
 
-
-.shareable-link-and-password
-    display: flex
-    flex-direction: row
-
+.password-box
+    input
+        border-top-right-radius: 0
+        border-bottom-right-radius: 0
+        // for some reason this makes the outline appear above the button
+        position: relative
+    button
+        border-top-left-radius: 0
+        border-bottom-left-radius: 0
 
 .pw-indicators
     display: flex
