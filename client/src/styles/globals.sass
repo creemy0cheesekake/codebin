@@ -33,6 +33,9 @@ input
     color: var.$base3
     font-size: 1rem
 
+.CodeMirror-linenumbers
+    width: 2rem
+
 .mid-screens
     display: none
 
@@ -44,7 +47,11 @@ input
         display: initial
     .large-screens
         display: none
+    .password-box button
+        padding-inline: .75rem
 
 @media (max-width: 700px)
     :root
         font-size: 12px
+    .menu-bar .settings
+        order: 2

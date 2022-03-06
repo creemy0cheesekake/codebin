@@ -9,7 +9,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faFloppyDisk,
-	faCircleArrowUp,
+	faCheck,
 	faGear,
 } from "@fortawesome/free-solid-svg-icons";
 const axios = require("axios").default;
@@ -17,7 +17,7 @@ const axios = require("axios").default;
 function MenuBar() {
 	const {
 		language,
-		setShowModal,
+		setShowLanguageSelectionModal,
 		link,
 		value,
 		setLink,
@@ -25,6 +25,7 @@ function MenuBar() {
 		canEdit,
 		hasPassword,
 		setHasPassword,
+		setShowSettingsModal,
 	} = useContext(Context);
 	const [passwordVal, setPasswordVal] = useState("");
 	const [linkBoxClicked, setLinkBoxClicked] = useState(false);
@@ -76,10 +77,13 @@ function MenuBar() {
 	return (
 		<div className="menu-bar">
 			<div className="language-selector-and-save">
-				<button className="settings">
+				<button
+					className="settings"
+					onClick={_ => setShowSettingsModal(true)}
+				>
 					<FontAwesomeIcon icon={faGear} />
 				</button>
-				<button onClick={_ => setShowModal(true)}>
+				<button onClick={_ => setShowLanguageSelectionModal(true)}>
 					Lang<span className="large-screens">uage</span>:&nbsp;
 					{language.toUpperCase()}
 				</button>
@@ -114,7 +118,7 @@ function MenuBar() {
 						/>
 						<button onClick={handleSubmitPassword}>
 							<FontAwesomeIcon
-								icon={faCircleArrowUp}
+								icon={faCheck}
 								className="mid-screens"
 							/>
 							<span className="large-screens">Submit</span>

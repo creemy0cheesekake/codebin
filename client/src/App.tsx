@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./styles/App.sass";
 import "codemirror/lib/codemirror.css";
 import "./styles/solarized-dark-theme.css";
@@ -133,14 +133,175 @@ import { Context } from "./components/Context";
 function App() {
 	const {
 		language,
-		showModal,
+		showLanguageSelectionModal,
 		setLink,
 		value,
 		canEdit,
 		setCanEdit,
 		setValue,
 		setHasPassword,
+		setShowLanguageSelectionModal,
+		setLanguage,
+		showSettingsModal,
+		setShowSettingsModal,
+		wrap,
+		setWrap,
 	} = useContext(Context);
+
+	const [langSelection, setLangSelection] = useState("");
+	const [wrapSelection, setWrapSelection] = useState(false);
+	const [fontSizeSelection, setFontSizeSelection] = useState("");
+	const languages = [
+		"APL",
+		"ASCIIARMOR",
+		"ASN.1",
+		"ASTERISK",
+		"BRAINFUCK",
+		"CLIKE",
+		"CLOJURE",
+		"CMAKE",
+		"COBOL",
+		"COFFEESCRIPT",
+		"COMMONLISP",
+		"CRYSTAL",
+		"CSS",
+		"CYPHER",
+		"D",
+		"DART",
+		"DIFF",
+		"DJANGO",
+		"DOCKERFILE",
+		"DTD",
+		"DYLAN",
+		"EBNF",
+		"ECL",
+		"EIFFEL",
+		"ELM",
+		"ERLANG",
+		"FACTOR",
+		"FCL",
+		"FORTH",
+		"FORTRAN",
+		"GAS",
+		"GFM",
+		"GHERKIN",
+		"GO",
+		"GROOVY",
+		"HAML",
+		"HANDLEBARS",
+		"HASKELL",
+		"HASKELL-LITERATE",
+		"HAXE",
+		"HTML",
+		"HTMLEMBEDDED",
+		"HTMLMIXED",
+		"HTTP",
+		"IDL",
+		"JAVASCRIPT",
+		"JINJA2",
+		"JSX",
+		"JULIA",
+		"LIVESCRIPT",
+		"LUA",
+		"MARKDOWN",
+		"MATHEMATICA",
+		"MBOX",
+		"MIRC",
+		"MLLIKE",
+		"MODELICA",
+		"MSCGEN",
+		"MUMPS",
+		"NGINX",
+		"NSIS",
+		"NTRIPLES",
+		"OCTAVE",
+		"OZ",
+		"PASCAL",
+		"PEGJS",
+		"PERL",
+		"PHP",
+		"PIG",
+		"POWERSHELL",
+		"PROPERTIES",
+		"PROTOBUF",
+		"PUG",
+		"PUPPET",
+		"PYTHON",
+		"Q",
+		"R",
+		"RPM",
+		"RST",
+		"RUBY",
+		"RUST",
+		"SAS",
+		"SASS",
+		"SCHEME",
+		"SHELL",
+		"SIEVE",
+		"SLIM",
+		"SMALLTALK",
+		"SMARTY",
+		"SOLR",
+		"SOY",
+		"SPARQL",
+		"SPREADSHEET",
+		"SQL",
+		"STEX",
+		"STYLUS",
+		"SWIFT",
+		"TCL",
+		"TEXTILE",
+		"TIDDLYWIKI",
+		"TIKI",
+		"TOML",
+		"TORNADO",
+		"TROFF",
+		"TTCN",
+		"TTCN-CFG",
+		"TURTLE",
+		"TWIG",
+		"VB",
+		"VBSCRIPT",
+		"VELOCITY",
+		"VERILOG",
+		"VHDL",
+		"VUE",
+		"WAST",
+		"WEBIDL",
+		"XML",
+		"XQUERY",
+		"YACAS",
+		"YAML",
+		"YAML-FRONTMATTER",
+		"Z80",
+	];
+	const confirmLangSelection = (lang: string) => {
+		setLanguage(lang.toLowerCase());
+		setShowLanguageSelectionModal(false);
+	};
+	const confirmSettingsChange = () => {
+		setWrap(wrapSelection);
+		(
+			document.querySelector(".CodeMirror-lines") as HTMLElement
+		).style.fontSize = `${fontSizeSelection}px`;
+		setShowSettingsModal(false);
+	};
+
+	const handleResetSettings = () => {
+		setWrapSelection(false);
+		setFontSizeSelection(
+			window
+				.getComputedStyle(document.querySelector("html")!, null)
+				.getPropertyValue("font-size")
+				.slice(0, -2)
+		);
+		(document.querySelector(".font-size>input") as HTMLInputElement).value =
+			window
+				.getComputedStyle(document.querySelector("html")!, null)
+				.getPropertyValue("font-size")
+				.slice(0, -2);
+		// cant just use fontSizeSelection above because the value wont update until the component rerenders which doesnt happen until the function finishes
+	};
 
 	const getBodyFromLink = async () => {
 		const entry = await (
@@ -182,7 +343,7 @@ function App() {
 				value={value}
 				className="textarea"
 				options={{
-					lineWrapping: false,
+					lineWrapping: wrap,
 					mode: language,
 					lineNumbers: true,
 					theme: "solarized",
@@ -190,10 +351,112 @@ function App() {
 				}}
 			/>
 			<MenuBar />
-			{showModal && <Modal />}
+			{showLanguageSelectionModal && (
+				<Modal
+					showModal={setShowLanguageSelectionModal}
+					header={"Pick Language for Syntax Highlighting"}
+					content={
+						<div className="content-box-language-selector">
+							{languages.map(el => (
+								<div
+									key={el}
+									className={
+										"lang " +
+										(langSelection === el ? "active" : "")
+									}
+									onClick={() => setLangSelection(el)}
+								>
+									{el}
+								</div>
+							))}
+						</div>
+					}
+					footer={
+						<>
+							{/* prettier-ignore */}
+							<button onClick={() => setShowLanguageSelectionModal(false)}>Cancel</button>
+							{/* prettier-ignore */}
+							<button onClick={() => confirmLangSelection(langSelection)}>Continue</button>
+						</>
+					}
+				/>
+			)}
+			{showSettingsModal && (
+				<Modal
+					showModal={setShowSettingsModal}
+					header={"Settings"}
+					content={
+						<div className="content-box-settings">
+							<div className="line-wrap">
+								Line wrapping:&nbsp;
+								<button
+									onClick={() =>
+										setWrapSelection(!wrapSelection)
+									}
+								>
+									<span className="wrap-on-off">
+										<span
+											className={`on ${
+												wrapSelection ? "active" : ""
+											}`}
+										>
+											On
+										</span>
+										<span
+											className={`off ${
+												!wrapSelection ? "active" : ""
+											}`}
+										>
+											Off
+										</span>
+									</span>
+								</button>
+							</div>
+							<div className="font-size">
+								Font size:&nbsp;
+								<input
+									style={{ width: "7ch" }}
+									type="number"
+									min="8"
+									max="30"
+									onBlur={e => {
+										e.target.value = `${Math.max(
+											8,
+											Math.min(+e.target.value, 30)
+										)}`;
+										setFontSizeSelection(e.target.value);
+									}}
+									defaultValue={window
+										.getComputedStyle(
+											document.querySelector(
+												".CodeMirror-lines"
+											)!,
+											null
+										)
+										.getPropertyValue("font-size")
+										.slice(0, -2)}
+								/>
+							</div>
+							<button
+								onClick={handleResetSettings}
+								className="reset"
+							>
+								Reset to defaults
+							</button>
+						</div>
+					}
+					footer={
+						<>
+							{/* prettier-ignore */}
+							<button onClick={() => setShowSettingsModal(false)}>Cancel</button>
+							{/* prettier-ignore */}
+							<button onClick={() => confirmSettingsChange()}>Confirm</button>
+						</>
+					}
+				/>
+			)}
 		</main>
 	);
 }
 
 export default App;
-// TODO: add settings button, which will be modal with toggle wrap and font size, and add conf json object to schema

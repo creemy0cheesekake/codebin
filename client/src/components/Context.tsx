@@ -5,10 +5,13 @@ export const Context: any = createContext(undefined);
 function ContextProvider({ children }: any) {
 	const [value, setValue] = useState("");
 	const [language, setLanguage] = useState("javascript");
-	const [showModal, setShowModal] = useState(false);
+	// prettier-ignore
+	const [showLanguageSelectionModal, setShowLanguageSelectionModal] = useState(false);
+	const [showSettingsModal, setShowSettingsModal] = useState(false);
 	const [link, setLink] = useState("");
 	const [canEdit, setCanEdit] = useState(false);
 	const [hasPassword, setHasPassword] = useState(false);
+	const [wrap, setWrap] = useState(false);
 
 	return (
 		<main>
@@ -16,8 +19,10 @@ function ContextProvider({ children }: any) {
 				value={{
 					language,
 					setLanguage,
-					showModal,
-					setShowModal,
+					showLanguageSelectionModal,
+					setShowLanguageSelectionModal,
+					showSettingsModal,
+					setShowSettingsModal,
 					link,
 					setLink,
 					value,
@@ -26,6 +31,8 @@ function ContextProvider({ children }: any) {
 					hasPassword,
 					setValue,
 					setHasPassword,
+					wrap,
+					setWrap,
 				}}
 			>
 				{children}
