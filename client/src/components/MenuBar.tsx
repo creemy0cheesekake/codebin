@@ -7,7 +7,11 @@ import {
 	getLink,
 } from "../MenuBarFunctions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
+import {
+	faFloppyDisk,
+	faCircleArrowUp,
+	faGear,
+} from "@fortawesome/free-solid-svg-icons";
 const axios = require("axios").default;
 
 function MenuBar() {
@@ -72,13 +76,17 @@ function MenuBar() {
 	return (
 		<div className="menu-bar">
 			<div className="language-selector-and-save">
+				<button className="settings">
+					<FontAwesomeIcon icon={faGear} />
+				</button>
 				<button onClick={_ => setShowModal(true)}>
-					Language: {language.toUpperCase()}
+					Lang<span className="large-screens">uage</span>:&nbsp;
+					{language.toUpperCase()}
 				</button>
 				{!!link && (
 					<button onClick={handleSave} className="save-file-button">
 						<FontAwesomeIcon icon={faFloppyDisk} />
-						&nbsp;Save File
+						&nbsp;Save<span className="large-screens"> File</span>
 					</button>
 				)}
 			</div>
@@ -104,7 +112,13 @@ function MenuBar() {
 								e.key === "Enter" && handleSubmitPassword()
 							}
 						/>
-						<button onClick={handleSubmitPassword}>Submit</button>
+						<button onClick={handleSubmitPassword}>
+							<FontAwesomeIcon
+								icon={faCircleArrowUp}
+								className="mid-screens"
+							/>
+							<span className="large-screens">Submit</span>
+						</button>
 					</span>
 				)}
 				{!link ? (

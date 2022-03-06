@@ -15,6 +15,7 @@ button
     border: none
     border-radius: 1rem
     font-size: 1rem
+    cursor: pointer
     &:hover
         filter: brightness(.75)
         transition: filter .2s
@@ -32,10 +33,17 @@ input
     color: var.$base3
     font-size: 1rem
 
+.mid-screens
+    display: none
+
 
 @media (max-width: 1200px)
     :root
         font-size: 14px
+    .mid-screens
+        display: initial
+    .large-screens
+        display: none
 
 @media (max-width: 700px)
     :root
