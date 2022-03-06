@@ -11,13 +11,13 @@ export const createNewEntry = async (req: Request, res: Response) => {
 			body,
 		});
 
-		res.json({
+		res.status(201).json({
 			success: true,
 			message: "entry successfully created",
 			link,
 		});
 	} catch ({ message }: any) {
-		res.json({
+		res.status(500).json({
 			success: false,
 			message,
 		});
@@ -37,12 +37,12 @@ export const updateEntry = async (req: Request, res: Response) => {
 		if (body) entry.body = body;
 		entry.save();
 
-		res.json({
+		res.status(204).json({
 			success: true,
 			message: "entry successfully updated",
 		});
 	} catch ({ message }: any) {
-		res.json({
+		res.status(500).json({
 			success: false,
 			message,
 		});
@@ -59,13 +59,13 @@ export const checkEditAccess = async (req: Request, res: Response) => {
 			(await comparePassword(password, entry.password)) ||
 			!entry.password;
 
-		res.json({
+		res.status(200).json({
 			success: true,
 			hasAccess,
 			message: `edit access${hasAccess ? "" : " not"} granted`,
 		});
 	} catch ({ message }: any) {
-		res.json({
+		res.status(500).json({
 			success: false,
 			message,
 		});
@@ -78,13 +78,13 @@ export const getEntry = async (req: Request, res: Response) => {
 
 		const entry = await Schema.findOne({ link: { $eq: link } });
 
-		res.json({
+		res.status(200).json({
 			success: true,
 			entry,
 			message: `entry${entry ? "" : " not"} found`,
 		});
 	} catch ({ message }: any) {
-		res.json({
+		res.status(500).json({
 			success: false,
 			message,
 		});
