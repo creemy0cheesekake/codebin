@@ -26,6 +26,9 @@ app.use((_, res, next) => {
 	next();
 });
 
+if (process.env.NODE_ENV === "production")
+	app.use(express.static("../client/build"));
+
 app.use(bodyParser.json());
 app.use("/api/v1/", router);
 

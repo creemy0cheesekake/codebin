@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import "./styles/App.sass";
 import "codemirror/lib/codemirror.css";
-import "./styles/solarized-dark-theme.css";
+import "codemirror/theme/darcula.css";
 
 import { Controlled } from "react-codemirror2";
 import MenuBar from "./components/MenuBar";
@@ -346,7 +346,7 @@ function App() {
 					lineWrapping: wrap,
 					mode: language,
 					lineNumbers: true,
-					theme: "solarized",
+					theme: "darcula",
 					readOnly: !canEdit,
 				}}
 			/>

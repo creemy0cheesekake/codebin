@@ -1,0 +1,28 @@
+{
+  "name": "codebin",
+  "version": "1.0.0",
+  "description": "Lightweight paste bin designed for sharing code",
+  "main": "index.js",
+  "scripts": {
+	"start": "cd server && npm start", 
+	"build": "cd client && npm run build", 
+	"install-client": "cd client && npm i", 
+	"heroku-postbuild": "npm run install-client && npm run build" 
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/creemy0cheesekake/codebin.git"
+  },
+  "keywords": [
+    "pastebin",
+    "code",
+    "share",
+    "paste"
+  ],
+  "author": "Arjun Anand",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/creemy0cheesekake/codebin/issues"
+  },
+  "homepage": "https://github.com/creemy0cheesekake/codebin#readme"
+}
