@@ -9,9 +9,10 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faFloppyDisk,
-	faCheck,
+	faArrowTurnDown,
 	faGear,
 } from "@fortawesome/free-solid-svg-icons";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 const axios = require("axios").default;
 
 function MenuBar() {
@@ -78,10 +79,15 @@ function MenuBar() {
 		<div className="menu-bar">
 			<div className="language-selector-and-save">
 				<button
-					className="settings"
+					className="icon-links settings"
 					onClick={_ => setShowSettingsModal(true)}
 				>
 					<FontAwesomeIcon icon={faGear} />
+				</button>
+				<button className="icon-links github">
+					<a href="https://github.com/creemy0cheesekake/codebin/">
+						<FontAwesomeIcon icon={faGithub} />
+					</a>
 				</button>
 				<button onClick={_ => setShowLanguageSelectionModal(true)}>
 					Lang<span className="large-screens">uage</span>:&nbsp;
@@ -94,17 +100,17 @@ function MenuBar() {
 					</button>
 				)}
 			</div>
+			<div className="pw-indicators">
+				<div
+					className={
+						"has-password " + (hasPassword ? "green" : "red")
+					}
+				>{`${hasPassword ? "P" : "Not p"}assword protected`}</div>
+				<div
+					className={"can-edit " + (canEdit ? "green" : "red")}
+				>{`Can${canEdit ? "" : "not"} edit`}</div>
+			</div>
 			<div className="shareable-link-and-password">
-				<div className="pw-indicators">
-					<div
-						className={
-							"has-password " + (hasPassword ? "green" : "red")
-						}
-					>{`Has ${hasPassword ? "" : "no"} password`}</div>
-					<div
-						className={"can-edit " + (canEdit ? "green" : "red")}
-					>{`Can ${canEdit ? "" : "not"} edit`}</div>
-				</div>
 				{!!link && (
 					<span className="password-box">
 						<input
@@ -118,8 +124,9 @@ function MenuBar() {
 						/>
 						<button onClick={handleSubmitPassword}>
 							<FontAwesomeIcon
-								icon={faCheck}
+								icon={faArrowTurnDown}
 								className="mid-screens"
+								rotation={90}
 							/>
 							<span className="large-screens">Submit</span>
 						</button>

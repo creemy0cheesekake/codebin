@@ -53,13 +53,17 @@ main
     transition: all .5s
 
 .password-box
+    $color: var.$base01
     input
         border-top-right-radius: 0
         border-bottom-right-radius: 0
+        box-shadow: inset 0 0 0 .2rem $color
+        outline: 0
     button
         border-top-left-radius: 0
         border-bottom-left-radius: 0
-        background-color: #40b13c
+        // box-shadow: inset 0 0 0 2px white
+        background-color: $color
 
 .pw-indicators
     display: flex
@@ -67,22 +71,24 @@ main
     width: max-content
     align-items: center
     div
-        border-radius: .5em
         padding: .25em
         font-size: .75rem
         &.green
-            background-color: var.$green
+            color: var.$green
         &.red
-            background-color: var.$red
+            color: var.$red
 
-.settings
+.icon-links
     background-color: transparent
+    box-shadow: none
     font-size: 1.65rem
     padding: 0 .5em
     height: fit-content
     align-self: center
-    svg path
+    &.settings svg path
         fill: gray
+    &.github svg path
+        fill: #7a007a
 
 .content-box-settings
     display: flex
