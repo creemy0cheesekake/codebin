@@ -6,6 +6,7 @@
   "scripts": {
     "start-client": "cd client && npm i && npm start",
     "start-server": "cd server && npm i && npm start",
+	"build": "cd client && npm run build",
     "dev": "run-p start-client start-server"
   },
   "repository": {
