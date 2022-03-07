@@ -1,46 +1,14 @@
-# Getting Started with Create React App
+# CodeBin
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A simple, lightweight paste bin to easily share code with one another on forums such as StackOverflow or Reddit.
 
-## Available Scripts
+#### Live Demo on Netlify: [codebin1.netlify.app](https://codebin1.netlify.app)
 
-In the project directory, you can run:
+## How to Use:
 
-### `npm start`
+Simply paste your code into the text area and click "`Get Link`" to recieve a short, shareable link that you can share with others.
+Optionally, add a password to restrict who is allowed to edit the file. By default, anyone with the link can edit the file.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+To save edits, click the "`Save File`" button in the menu bar. Saving the file is only allowed for those who have edit access.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Also in the menu bar, there is a Settings icon. In the settings, you can toggle line wrapping, change the tab size, whether or not the document uses tabs or spaces for indents, and the font size of the code. There is also a "`Reset to defaults`" button that resets all settings to the default state.
