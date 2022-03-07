@@ -2,7 +2,7 @@
 
 A simple, lightweight paste bin to easily share code with one another on forums such as StackOverflow or Reddit.
 
-#### Live Demo on Netlify: [codebin1.netlify.app](https://codebin1.netlify.app)
+### Live Demo on Netlify: [codebin1.netlify.app](https://codebin1.netlify.app)
 
 ## How to Use:
 
