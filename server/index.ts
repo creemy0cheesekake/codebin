@@ -10,7 +10,6 @@ const app = express();
 
 app.use(
 	cors({
-		credentials: true,
 		origin: process.env.CLIENT_URL,
 	})
 );
@@ -22,12 +21,11 @@ app.use((_, res, next) => {
 		"GET, POST, PUT, DELETE, PATCH"
 	);
 	res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-	res.setHeader("Access-Control-Allow-Credentials", "true");
 	next();
 });
 
-if (process.env.NODE_ENV === "production")
-	app.use(express.static("../client/build"));
+// if (process.env.NODE_ENV === "production")
+app.use(express.static("../client/build"));
 
 app.use(bodyParser.json());
 app.use("/api/v1/", router);
