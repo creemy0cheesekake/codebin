@@ -29,6 +29,13 @@
   },
   "homepage": "https://github.com/creemy0cheesekake/codebin#readme",
   "devDependencies": {
-    "@types/react": "^17.0.39"
+		"@types/axios": "^0.14.0",
+		"@types/codemirror": "^5.60.5",
+		"@types/node": "^17.0.15",
+		"@types/react": "^17.0.39",
+		"@types/react-dom": "^17.0.11",
+		"@types/react-router-dom": "^5.3.3",
+		"@types/sass": "^1.43.1",
+		"@types/typescript": "^2.0.0"
   }
 }
