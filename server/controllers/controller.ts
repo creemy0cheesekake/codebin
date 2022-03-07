@@ -5,19 +5,19 @@ import Schema from "../schemas/Schema";
 export const createNewEntry = async (req: Request, res: Response) => {
 	try {
 		let link = await generateLink();
-		const { body } = req.body;
+		const { body, lang } = req.body;
 		await Schema.create({
 			link,
 			body,
+			lang,
 		});
-
 		res.status(201).json({
 			success: true,
 			message: "entry successfully created",
 			link,
 		});
 	} catch ({ message }: any) {
-		res.status(500).json({
+		res.status(400).json({
 			success: false,
 			message,
 		});
@@ -26,7 +26,7 @@ export const createNewEntry = async (req: Request, res: Response) => {
 
 export const updateEntry = async (req: Request, res: Response) => {
 	try {
-		const { password, body } = req.body;
+		const { password, body, lang } = req.body;
 		const { link } = req.params;
 
 		const entry = await Schema.findOne({ link: { $eq: link } });
@@ -35,6 +35,7 @@ export const updateEntry = async (req: Request, res: Response) => {
 			entry.password = await hashPassword(password);
 
 		if (body) entry.body = body;
+		if (lang) entry.lang = lang;
 		entry.save();
 
 		res.status(204).json({

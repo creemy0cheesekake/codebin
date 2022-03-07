@@ -151,6 +151,10 @@ function App() {
 	const [langSelection, setLangSelection] = useState("");
 	const [wrapSelection, setWrapSelection] = useState(false);
 	const [fontSizeSelection, setFontSizeSelection] = useState("");
+	const [useTabs, setUseTabs] = useState(true);
+	const [useTabsSelection, setUseTabsSelection] = useState(true);
+	const [tabSize, setTabSize] = useState(4);
+	const [tabSizeSelection, setTabSizeSelection] = useState(4);
 	const languages = [
 		"APL",
 		"ASCIIARMOR",
@@ -284,6 +288,8 @@ function App() {
 		(
 			document.querySelector(".CodeMirror-lines") as HTMLElement
 		).style.fontSize = `${fontSizeSelection}px`;
+		setUseTabs(useTabsSelection);
+		setTabSize(tabSizeSelection);
 		setShowSettingsModal(false);
 	};
 
@@ -301,9 +307,11 @@ function App() {
 				.getPropertyValue("font-size")
 				.slice(0, -2);
 		// cant just use fontSizeSelection above because the value wont update until the component rerenders which doesnt happen until the function finishes
+		setUseTabsSelection(true);
+		setTabSizeSelection(4);
 	};
 
-	const getBodyFromLink = async () => {
+	const getDataFromLink = async () => {
 		const entry = await (
 			await axios.get(
 				process.env.REACT_APP_API_URL +
@@ -311,7 +319,10 @@ function App() {
 					window.location.pathname
 			)
 		).data.entry;
-		if (entry) setValue(decodeURI(entry.body));
+		if (entry) {
+			setValue(decodeURI(entry.body));
+			setLanguage(entry.lang.toUpperCase());
+		}
 		return entry;
 	};
 
@@ -326,9 +337,16 @@ function App() {
 	};
 
 	useEffect(() => {
+		// necessary because in firefox number inputs dont focus when arrows are clicked
+		const inputs = document.querySelectorAll('[type="number"]') as any;
+		for (let input of inputs) {
+			input.onclick = () => {
+				input.focus();
+			};
+		}
 		(async () => {
 			if (window.location.pathname === "/") return setCanEdit(true);
-			const entry = await getBodyFromLink();
+			const entry = await getDataFromLink();
 			if (!entry) window.location.href = "/";
 			setHasPassword(!!entry.password);
 			setLink(window.location.pathname.substring(1));
@@ -348,6 +366,9 @@ function App() {
 					lineNumbers: true,
 					theme: "darcula",
 					readOnly: !canEdit,
+					tabSize,
+					indentUnit: tabSize,
+					indentWithTabs: useTabs,
 				}}
 			/>
 			<MenuBar />
@@ -394,7 +415,7 @@ function App() {
 										setWrapSelection(!wrapSelection)
 									}
 								>
-									<span className="wrap-on-off">
+									<span className="on-off-toggle">
 										<span
 											className={`on ${
 												wrapSelection ? "active" : ""
@@ -411,6 +432,50 @@ function App() {
 										</span>
 									</span>
 								</button>
+							</div>
+							<div className="tabs-or-spaces">
+								Tabs or spaces for indents:&nbsp;
+								<button
+									onClick={() =>
+										setUseTabsSelection(!useTabsSelection)
+									}
+								>
+									<span className="on-off-toggle">
+										<span
+											className={`on ${
+												useTabsSelection ? "active" : ""
+											}`}
+										>
+											Tabs
+										</span>
+										<span
+											className={`off ${
+												!useTabsSelection
+													? "active"
+													: ""
+											}`}
+										>
+											Spaces
+										</span>
+									</span>
+								</button>
+							</div>
+							<div className="tab-size">
+								Tab size:&nbsp;
+								<input
+									style={{ width: "7ch" }}
+									type="number"
+									min="2"
+									max="8"
+									onBlur={e => {
+										e.target.value = `${Math.max(
+											2,
+											Math.min(+e.target.value, 8)
+										)}`;
+										setTabSizeSelection(+e.target.value);
+									}}
+									defaultValue={4}
+								/>
 							</div>
 							<div className="font-size">
 								Font size:&nbsp;

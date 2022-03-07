@@ -16,5 +16,8 @@ const Schema = new mongoose_1.default.Schema({
     password: {
         type: String,
     },
+    lang: {
+        type: String,
+    },
 });
 exports.default = mongoose_1.default.model("Schema", Schema);

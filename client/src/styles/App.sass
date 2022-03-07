@@ -88,7 +88,7 @@ main
     &.settings svg path
         fill: gray
     &.github svg path
-        fill: #7a007a
+        fill: #7a007a !important
 
 .content-box-settings
     display: flex
@@ -98,12 +98,12 @@ main
         margin-top: 3rem
         width: fit-content
         align-self: center
-    .line-wrap button
+    div button
         border-radius: 999px
         box-sizing: content-box
         padding-inline: 1rem
         background-color: var.$base02
-        .wrap-on-off
+        .on-off-toggle
             display: flex
             justify-content: space-between
             span

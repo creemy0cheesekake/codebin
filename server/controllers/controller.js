@@ -18,10 +18,11 @@ const Schema_1 = __importDefault(require("../schemas/Schema"));
 const createNewEntry = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let link = yield (0, helperFunctions_1.generateLink)();
-        const { body } = req.body;
+        const { body, lang } = req.body;
         yield Schema_1.default.create({
             link,
             body,
+            lang,
         });
         res.status(201).json({
             success: true,
@@ -30,7 +31,7 @@ const createNewEntry = (req, res) => __awaiter(void 0, void 0, void 0, function*
         });
     }
     catch ({ message }) {
-        res.status(500).json({
+        res.status(400).json({
             success: false,
             message,
         });
@@ -39,13 +40,15 @@ const createNewEntry = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.createNewEntry = createNewEntry;
 const updateEntry = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { password, body } = req.body;
+        const { password, body, lang } = req.body;
         const { link } = req.params;
         const entry = yield Schema_1.default.findOne({ link: { $eq: link } });
         if (password !== undefined)
             entry.password = yield (0, helperFunctions_1.hashPassword)(password);
         if (body)
             entry.body = body;
+        if (lang)
+            entry.lang = lang;
         entry.save();
         res.status(204).json({
             success: true,

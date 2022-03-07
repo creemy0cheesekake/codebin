@@ -64,13 +64,17 @@ function MenuBar() {
 	};
 
 	const handleGetLink = async () => {
-		const [msg, success, newLink] = await getLink(value);
-		if (!success) return alert(msg);
-		setLink(newLink);
+		try {
+			const newLink = await getLink(value, language);
+			setLink(newLink);
+			window.location.href = `http://${window.location.host}/${newLink}`;
+		} catch (err: any) {
+			alert(err.response.data.message);
+		}
 	};
 
 	const handleSave = async () => {
-		const [msg, success] = await saveFile(link, value);
+		const [msg, success] = await saveFile(link, value, language);
 		if (success) alert("saved successfully");
 		else alert(`err: ${msg}`);
 	};

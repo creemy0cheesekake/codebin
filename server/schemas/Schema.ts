@@ -12,6 +12,9 @@ const Schema = new mongoose.Schema({
 	password: {
 		type: String,
 	},
+	lang: {
+		type: String,
+	},
 });
 
 export default mongoose.model("Schema", Schema);
