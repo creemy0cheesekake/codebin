@@ -21,7 +21,7 @@
   ],
   "engines": {
     "node": "16.x"
-  }
+  },
   "author": "Arjun Anand",
   "license": "ISC",
   "bugs": {
