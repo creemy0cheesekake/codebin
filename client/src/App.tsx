@@ -321,7 +321,7 @@ function App() {
 		).data.entry;
 		if (entry) {
 			setValue(decodeURI(entry.body));
-			setLanguage(entry.lang.toUpperCase());
+			setLanguage(entry.lang);
 		}
 		return entry;
 	};
